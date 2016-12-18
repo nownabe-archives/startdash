@@ -6,9 +6,13 @@ backend =
 platform = backend.os_info[:family]
 platform_version = backend.os_info[:release]
 platform_dir = File.expand_path("../platforms/#{platform}-#{platform_version}", __FILE__)
-common_dir = 
 
 MItamae::RecipeContext.define_method(:cookbook) do |name|
+  if ENV["COOKBOOK"] && ENV["COOKBOOK"] != name
+    MItamae.logger.info "Skip #{name} cookbook"
+    return
+  end
+  MItamae.logger.info "Execute #{name} cookbook"
   platform_cookbook =
     File.join(platform_dir, "cookbooks", name)
   common_cookbook =
