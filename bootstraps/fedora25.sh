@@ -25,4 +25,4 @@ fi
 
 # Run mitamae
 cd ${repodir}"
-${mitamae} local recipe.rb
+${mitamae} local boot.rb
