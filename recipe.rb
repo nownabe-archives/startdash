@@ -1,4 +1,4 @@
 cookbook "base"
-cookbook "fish"
+cookbook "zsh"
 cookbook "chrome"
 cookbook "anyenv"
