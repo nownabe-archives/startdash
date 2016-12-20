@@ -1,1 +1,1 @@
-source ~/.zsh.d/*
+source ~/.zsh.d/*.sh
