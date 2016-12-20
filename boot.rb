@@ -1,3 +1,17 @@
+# Register aliases
+home = ENV["HOME"]
+bin  = File.join(home, "bin")
+src  = File.join(home, "src")
+
+MItamae::RecipeContext.define_method(:home) { home }
+MItamae::RecipeContext.define_method(:bin)  { bin }
+MItamae::RecipeContext.define_method(:src)  { src }
+
+MItamae::ResourceContext.define_method(:home) { home }
+MItamae::ResourceContext.define_method(:bin)  { bin }
+MItamae::ResourceContext.define_method(:src)  { src }
+
+# Detect platform and define 'cookbook' method
 backend =
   @variables[:node]
     .instance_variable_get(:@backend)
@@ -29,6 +43,4 @@ end
 
 MItamae.logger.info "Current Platform: #{platform} #{platform_version}"
 
-cookbook "chrome"
-cookbook "anyenv"
-
+include_recipe "recipe"
