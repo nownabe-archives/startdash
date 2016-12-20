@@ -25,4 +25,4 @@ fi
 
 # Run mitamae
 cd ${repodir}"
-${mitamae} local boot.rb
+sudo ${mitamae} local boot.rb

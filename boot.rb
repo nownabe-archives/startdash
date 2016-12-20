@@ -1,16 +1,3 @@
-# Register aliases
-home = ENV["HOME"]
-bin  = File.join(home, "bin")
-src  = File.join(home, "src")
-
-MItamae::RecipeContext.define_method(:home) { home }
-MItamae::RecipeContext.define_method(:bin)  { bin }
-MItamae::RecipeContext.define_method(:src)  { src }
-
-MItamae::ResourceContext.define_method(:home) { home }
-MItamae::ResourceContext.define_method(:bin)  { bin }
-MItamae::ResourceContext.define_method(:src)  { src }
-
 # Detect platform and define 'cookbook' method
 backend =
   @variables[:node]
@@ -41,6 +28,23 @@ MItamae::RecipeContext.define_method(:cookbook) do |name|
   end
 end
 
+# Register aliases
+user = ENV["SUDO_USER"]
+home = platform =~ /darwin/i ? "/Users/#{user}" : "/home/#{user}"
+bin  = File.join(home, "bin")
+src  = File.join(home, "src")
+
+MItamae::RecipeContext.define_method(:username) { user }
+MItamae::RecipeContext.define_method(:home)     { home }
+MItamae::RecipeContext.define_method(:bin)      { bin }
+MItamae::RecipeContext.define_method(:src)      { src }
+
+MItamae::ResourceContext.define_method(:username) { user }
+MItamae::ResourceContext.define_method(:home)     { home }
+MItamae::ResourceContext.define_method(:bin)      { bin }
+MItamae::ResourceContext.define_method(:src)      { src }
+
+# Run recipe
 MItamae.logger.info "Current Platform: #{platform} #{platform_version}"
 
 include_recipe "recipe"
