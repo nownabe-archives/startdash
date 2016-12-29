@@ -1,3 +1,5 @@
+include_recipe "anyenv_util"
+
 package "git"
 
 git "#{home}/.anyenv" do
@@ -15,3 +17,5 @@ git "#{home}/.anyenv/plugins/anyenv-update" do
   user username
   repository "https://github.com/znz/anyenv-update.git"
 end
+
+include_recipe "rbenv"

@@ -4,9 +4,10 @@ backend =
     .instance_variable_get(:@backend)
     .instance_variable_get(:@backend)
 
-platform = backend.os_info[:family]
+platform_name = backend.os_info[:family]
 platform_version = backend.os_info[:release]
-platform_dir = File.expand_path("../platforms/#{platform}-#{platform_version}", __FILE__)
+platform = "#{platform_name}-#{platform_version}"
+platform_dir = File.expand_path("../platforms/#{platform}", __FILE__)
 
 MItamae::RecipeContext.define_method(:cookbook) do |name|
   if ENV["COOKBOOK"] && ENV["COOKBOOK"] != name
@@ -18,6 +19,7 @@ MItamae::RecipeContext.define_method(:cookbook) do |name|
     File.join(platform_dir, "cookbooks", name)
   common_cookbook =
     File.join(File.expand_path("../common_cookbooks", __FILE__), name)
+puts platform_cookbook
 
   if File.directory?(platform_cookbook)
     include_recipe(platform_cookbook)
@@ -26,6 +28,10 @@ MItamae::RecipeContext.define_method(:cookbook) do |name|
   else
     include_recipe(name)
   end
+end
+
+MItamae::RecipeContext.define_method(:include) do |mod|
+  singleton_class.include(mod)
 end
 
 # Register aliases
@@ -45,6 +51,7 @@ MItamae::ResourceContext.define_method(:bin)      { bin }
 MItamae::ResourceContext.define_method(:src)      { src }
 
 # Run recipe
-MItamae.logger.info "Current Platform: #{platform} #{platform_version}"
+MItamae.logger.info "Current Platform: #{platform}"
 
 include_recipe "recipe"
+include_recipe File.join(platform_dir, "recipe")
