@@ -19,7 +19,6 @@ MItamae::RecipeContext.define_method(:cookbook) do |name|
     File.join(platform_dir, "cookbooks", name)
   common_cookbook =
     File.join(File.expand_path("../common_cookbooks", __FILE__), name)
-puts platform_cookbook
 
   if File.directory?(platform_cookbook)
     include_recipe(platform_cookbook)
@@ -30,8 +29,52 @@ puts platform_cookbook
   end
 end
 
+resource_names = %i(
+  directory execute file gem_package git http_request
+  link local_ruby_block package group user remote_directory
+  remote_file service template
+)
+
 MItamae::RecipeContext.define_method(:include) do |mod|
-  singleton_class.include(mod)
+  singleton_class.prepend(mod)
+
+  patched_resources =
+    resource_names.each_with_object({}) do |name, patched_resources|
+      klass_name =
+        case name
+        when :http_request
+          :HTTPRequest
+        else
+          name.to_s.gsub(/(^|_)(.)/) { $2.upcase }.to_sym
+        end
+      resource = ::MItamae::Resource.const_get(klass_name)
+
+      patched_resource_context = Class.new(::MItamae::ResourceContext) { prepend(mod) }
+
+      patched_resource = Class.new(resource)
+      patched_resource.define_singleton_method(:to_s) { superclass.to_s }
+      patched_resource.available_actions = resource.available_actions
+      patched_resource.define_method(:initialize) do |resource_name, recipe, variables = {}, &block|
+        @recipe = recipe
+        @attributes = Hashie::Mash.new
+        @resource_name = resource_name
+        @verify_commands = []
+        @notifications = []
+        @subscriptions = []
+        if block
+          patched_resource_context.new(self, variables).instance_exec(&block)
+        end
+        process_attributes
+        @attributes.freeze
+      end
+      patched_resources[name] = patched_resource
+    end
+
+  patched_resources.each do |name, patched_resource|
+    singleton_class.define_method(name) do |arg1, &block|
+      @recipe.children << patched_resource.new(arg1, @recipe, @variables, &block)
+    end
+  end
 end
 
 # Register aliases
