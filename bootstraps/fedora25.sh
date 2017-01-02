@@ -15,11 +15,11 @@ else
 fi
 
 # Download mitamae binary
-
+version="1.3.2"
 mitamae="$HOME/bin/mitamae"
-if [ ! -f "${mitamae}" ]; then
+if [ ! -f "${mitamae}" ] && (${mitamae} version | grep -q ${version}); then
   mkdir -p $HOME/bin
-  curl -sLo ${mitamae} https://github.com/k0kubun/mitamae/releases/download/v1.2.4/mitamae-x86_64-linux
+  curl -sLo ${mitamae} https://github.com/k0kubun/mitamae/releases/download/v${version}/mitamae-x86_64-linux
   chmod +x ${mitamae}
 fi
 
