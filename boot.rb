@@ -84,11 +84,13 @@ bin  = File.join(home, "bin")
 src  = File.join(home, "src")
 
 MItamae::RecipeContext.define_method(:username) { user }
+MItamae::RecipeContext.define_method(:default_user) { user }
 MItamae::RecipeContext.define_method(:home)     { home }
 MItamae::RecipeContext.define_method(:bin)      { bin }
 MItamae::RecipeContext.define_method(:src)      { src }
 
 MItamae::ResourceContext.define_method(:username) { user }
+MItamae::ResourceContext.define_method(:default_user) { user }
 MItamae::ResourceContext.define_method(:home)     { home }
 MItamae::ResourceContext.define_method(:bin)      { bin }
 MItamae::ResourceContext.define_method(:src)      { src }

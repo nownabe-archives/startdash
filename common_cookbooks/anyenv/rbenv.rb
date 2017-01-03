@@ -4,6 +4,7 @@ version = "2.4.0"
 default_gems = %w(
   bundler
   pry
+  neovim
 )
 
 %w(
