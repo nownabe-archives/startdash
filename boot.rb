@@ -14,19 +14,14 @@ MItamae::RecipeContext.define_method(:cookbook) do |name|
     MItamae.logger.info "Skip #{name} cookbook"
     return
   end
-  MItamae.logger.info "Execute #{name} cookbook"
+  MItamae.logger.info "Load #{name} cookbook"
   platform_cookbook =
     File.join(platform_dir, "cookbooks", name)
   common_cookbook =
     File.join(File.expand_path("../common_cookbooks", __FILE__), name)
 
-  if File.directory?(platform_cookbook)
-    include_recipe(platform_cookbook)
-  elsif File.directory?(common_cookbook)
-    include_recipe(common_cookbook)
-  else
-    include_recipe(name)
-  end
+  include_recipe(platform_cookbook) if File.directory?(platform_cookbook)
+  include_recipe(common_cookbook) if File.directory?(common_cookbook)
 end
 
 resource_names = %i(
