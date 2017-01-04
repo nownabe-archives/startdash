@@ -9,6 +9,7 @@ Plug 'vim-ruby/vim-ruby'
 call plug#end()
 
 " Auto Installation
+" from http://qiita.com/b4b4r07/items/fa9c8cceb321edea5da0
 
 let s:plug = {
 \ "plugs": get(g:, 'plugs', {})
