@@ -1,1 +1,3 @@
-source ~/.zsh.d/*.sh
+for config in $(ls ~/.zsh.d/*.sh); do
+  source $config
+done
