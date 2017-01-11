@@ -19,3 +19,4 @@ git "#{home}/.anyenv/plugins/anyenv-update" do
 end
 
 include_recipe "rbenv"
+include_recipe "pyenv"
