@@ -1,4 +1,5 @@
 cookbook "base"
+cookbook "packages"
 cookbook "zsh"
 cookbook "chrome"
 cookbook "anyenv"
